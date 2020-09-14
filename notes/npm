@@ -1,0 +1,21 @@
+installng package globally
+
+Nodemon: live reload server
+
+npm install -g nodemon
+
+package.json file
+npm init
+accept default sugg else edit
+
+
+installing package locally
+instll lodash 
+$ npm i --save lodash
+
+Dependencide & sharing code
+
+npm install : to install dependencies files fron package.json file for current project
+
+
+

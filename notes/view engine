@@ -1,0 +1,144 @@
+****************view engine at a glance******************
+it provide view template to our app
+****************ejs view engine******************
+
+install ejs 
+npm i ejs
+
+ register on app.js:
+ //register view engine
+app.set('view engine','ejs');
+app.set('views','views');
+
+create index.ejs,about.ejs and 404.ejs pages
+on views form rendering template
+
+render file using ejs template:
+app.get('/',(req,res)=>{
+    // res.send('<p>Home Page</p>');
+res.render('index');   
+});
+
+app.get('/about',(req,res)=>{
+    // res.send('<p>About Page</p>');
+res.render('about');    
+});
+
+app.get('/blogs/create',(req,res)=>{
+    res.render('create');
+})
+
+//redirects
+app.get('/about-us',(req,res)=>{
+    res.redirect('/about');
+});
+
+//404 page
+app.use((req,res)=>{
+res.status(404).render('404'); 
+})
+
+
+****************passing data into views************************
+on app.js file add code  after rendering file:
+app.get('/',(req,res)=>{
+    // res.send('<p>Home Page</p>');
+res.render('index',{title:'Home'});   
+});
+and on index .ejs file on title section:
+   <title>Blog Ninja| <%= title %></title>
+
+do respective for all pages
+
+server side rendering:
+on app.js file create blogs array:
+app.get('/',(req,res)=>{
+    //array of blogs
+    const blogs=[
+        {title:'Youshi finds eggs',snippet:'lorem ipsum dolor sit amet consectetur'},
+        {title:'Youshi finds eggs',snippet:'lorem ipsum dolor sit amet consectetur'},
+        {title:'Youshi finds eggs',snippet:'lorem ipsum dolor sit amet consectetur'}
+    ];
+    // res.send('<p>Home Page</p>');
+res.render('index',{title:'Home',blogs});   
+});
+
+on index.ejs file: 
+
+ <div class="blogs content">
+        <h2>All Blogs</h2>
+        <% if(blogs.length > 0){ %>
+         <% blogs.forEach(blog=>{ %>
+            <h3 class="title"><%= blog.title %></h3>
+            <p class="snippet"> <%= blog.snippet %></p> 
+         <% }) %> 
+       <%  }else { %>
+    <p>there are no blogs to display</p>
+       <% } %>
+    </div>
+
+
+
+*****************partials**********************
+for partial template format create default folder partials on views 
+inside create head.ejs,nav.ejs and footer ejs files
+
+head:
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Ninja| <%= title %></title>
+</head>
+
+
+nav content:
+<nav>
+    <div class="site-title">
+        <a href="/"><h1>Blog Ninja</h1></a>
+        <p>A Net Ninja Site</p>
+    </div>
+    <ul>
+        <li><a href="/">Blogs</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/blogs/create">New Blog</a></li>
+    </ul>
+</nav>
+
+
+footer content:
+<footer>
+    Copyright &copy;  Blog Ninja 2020
+</footer>
+</body>
+</html>
+
+
+on index and other files include files  content:
+
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/head.ejs')  %>
+<body>
+    <%- include('./partials/nav.ejs')  %>
+    <div class="blogs content">
+        <h2>All Blogs</h2>
+        <% if(blogs.length > 0){ %>
+         <% blogs.forEach(blog=>{ %>
+            <h3 class="title"><%= blog.title %></h3>
+            <p class="snippet"> <%= blog.snippet %></p> 
+         <% }) %> 
+       <%  }else { %>
+    <p>there are no blogs to display</p>
+       <% } %>
+    </div>
+    <%- include('./partials/footer.ejs')  %>
+   
+
+
+
+*******************Add CSS*******************
+
+add css on head .js file
+
+
+

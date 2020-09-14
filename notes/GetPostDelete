@@ -1,0 +1,111 @@
+**************request type*******************
+GET request oget a resource
+POST request to ceate new data
+DELETE request to delete data
+PUT request to update data
+
+localhost:3000/blogs POST
+
+
+
+*************post requests****************
+
+on app.js add middleware:
+
+app.use(express.utlencoded({extended:true}));
+
+app.post('/blogs',(req,res)=>{
+const blog= new Blog(req.body);
+blog.save()
+.then((result)=>{
+    res.redirect('/blogs');
+})
+.catch((err)=>{
+    console.log(err);
+})
+})
+
+
+
+***************Route parameters***********************
+the variable parts of the route that may change value
+
+localhost:3000/blogs/:id
+
+on app.js:
+
+app.get('/blogs/:id',(req,res)=>{
+    const id=req.params.id;
+    console.log(id);
+    Blog.findById(id)
+    .then(result=>{
+        res.render('details',{blog:result,title:'Blog Details'});
+    })
+    .catch(err=>{
+        console.log(err);
+    });
+})
+
+on vide folder add detail.ejs file:
+content:
+<html lang="en">
+<%- include("./partials/head.ejs") %>
+
+<body>
+  <%- include("./partials/nav.ejs") %>
+
+  <div class="details content">
+    <h2><%= blog.title %></h2>
+    <div class="content">
+      <p><%= blog.body %></p>
+    </div>
+    <a class="delete" data-doc="<%= blog._id %>">delete</a>
+  </div>
+
+  <%- include("./partials/footer.ejs") %>
+<!-- 
+  <script>
+    const trashcan = document.querySelector('a.delete');
+    trashcan.addEventListener('click', (e) => {
+      const endpoint = `/blogs/${trashcan.dataset.doc}`;
+      fetch(endpoint, {
+        method: 'DELETE',
+      })
+      .then(response => response.json())
+      .then(data => window.location.href = data.redirect)
+      .catch(err => console.log(err));
+    });
+    
+  </script> -->
+
+
+*********************Delete Requests**********************
+on details.ejs file:] <script>
+    const trashcan = document.querySelector('a.delete');
+    trashcan.addEventListener('click', (e) => {
+      const endpoint = `/blogs/${trashcan.dataset.doc}`;
+      fetch(endpoint, {
+        method: 'DELETE',
+      })
+      .then(response => response.json())
+      .then(data => window.location.href = data.redirect)
+      .catch(err => console.log(err));
+    });
+  </script>
+
+
+  on app.js:
+
+  
+app.delete('/blogs/:id',(req,res)=>{
+    const id=req.params.id;
+    Blog.findByIdAndDelete(id)
+    .then(result =>{
+        res.json({redirect:'/blogs'})
+    })
+    .catch(err=>{
+        console.log(err);
+    })
+})
+
+

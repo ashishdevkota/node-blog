@@ -1,0 +1,174 @@
+sql:
+Tables,rows , Column
+
+NoSql:
+Collections,Documents,MongodB
+
+
+Collections:
+
+User Collection:
+User document
+User document
+User document
+
+Blog Collection:
+Blog document
+Blog document
+Blog document
+
+
+blog document:-> {
+    id:
+    title:
+    snippet:
+    body:
+}
+***************MongoDB setup & Atlas**************
+https://www.mongodb.com/cloud/atlas
+ id:ashishdevkota03@gmail.com / 9843495789
+crete cluster
+collections/add own data
+database name &  collection name
+
+database access/add new database user 
+netmkct PP:test1234  read and write 
+
+cluster/connect your application/copy urI
+//connect to mongodb
+const dbURI='mongodb+srv://netmkct:test1234@cluster0.ucnxo.mongodb.net/<dbname>?retryWrites=true&w=majority'
+
+
+
+****************Mongoose ,Models & Schemas*****************
+Mongoose
+-> Mongoose is an ODM library - Object Document Mapping library
+
+mongoose--->user model  (User.get(),User.findById())
+        -->Blog mode  (Blog.deleteOne())
+
+
+      Schemas & model
+-> Schemas defines the structure of a type of data /document 
+-Properties & property types
+
+User Schems:
+name(string),required
+age(number)
+bio(string),required
+
+
+Blog Schema:
+-title(string),required
+-snippet(string),required
+body(string),required
+
+
+models allow us to communicate with databse collections
+Blog Schema-> get,save,delete,etc  --> Database Blog Collection
+
+
+npm  install mongoose
+
+//connect to mongodb
+const dbURI='mongodb+srv://netmkct:test1234@cluster0.ucnxo.mongodb.net/node-tuts?retryWrites=true&w=majority'
+mongoose.connect(dbURI,{useNewUrlParser:true,useUnifiedTopology:true})
+ .then((result)=>app.listen(3000))
+ .catch((err)=>console.log(err));
+
+
+for models & schema crete new folder  models
+inside create blog.js file
+(create blog schema and model)
+content:
+const mongoose=require('mongoose');
+const Schema=mongoose.Schema;
+
+const blogSchema= new Schema({
+    title: {
+        type:String,
+        required:true
+    },
+    snippet: {
+        type:String,
+        required:true
+    },
+    body: {
+        type:String,
+        required:true
+    }
+},{timestamp:true});
+
+const Blog= mongoose.model('Blog',blogSchema)
+
+module.exports=Blog;
+
+
+
+***************Getting & saving Data******************
+on app.js:
+
+const Blog=require('./models/blog');
+
+
+
+//mongooseand mongo sandbox routes
+app.get('/add-blog',(req,res)=>{
+const blog=new Blog({
+    title:'new blog',
+    snippet:'about my new blog ',
+    body:'more about my new blog'
+});
+
+blog.save()
+.then((result)=>{
+    res.send(result)
+})
+.catch((err)=>{
+    console.log(err)
+ })
+})
+
+retrive allthe blog
+
+app.get('/all-blogs',(req,res)=>{
+    Blog.find()
+    .then((result)=>{
+        res.send(result)
+        .catch((err)=>{
+            console.log(err);
+        })
+    })
+})
+
+
+single blog:
+app.get('/single-blog',(req,res)=>{
+    Blog.findById('5f5318611194604be0d0579e')
+    .then((result)=>{
+        res.send(result);
+    })
+    .catch((err)=>{
+        console.log(err);
+    });
+});
+
+*****************outputting Documents in Views*******************8
+
+//blog route
+on app.js:
+
+app.get('/blogs',(req,res)=>{
+ Blog.find().sort({_id:-1})
+ .then((result)=>{
+  res.render('index',{title:'All Blogs',blogs:result})
+})
+  .catch((err)=>{
+    console.log(err)
+})
+});
+
+app.get('/blogs/create',(req,res)=>{
+    res.render('create',{title:'create'});
+});
+

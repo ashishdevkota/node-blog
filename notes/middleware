@@ -1,0 +1,35 @@
+  code which runs (on the server)  between getting a request and sending a response
+
+midleware examples
+*Logger middleware to log detail of every request
+*Authentication check middleware for protected routes
+*middleware to parse JSONndata from request*return 404 pages
+
+
+******register middleware and next key*****
+app.use((req,res,next)=>{
+    console.log("new request made: ");
+    console.log('host :',req.hostname);
+    console.log('path :',req.path);
+    console.log('method :',req.method);
+    next();
+});
+
+****************3rd party middleware***************
+morgan as middleware:
+
+declare:
+const morgan=require('morgan');
+
+//use morgan
+app.use(morgan('dev'))
+
+
+*********************Static files********
+(for public files and images)
+on app.js :
+
+//middleware & static file
+app.use(express.static('public'));
+
+
